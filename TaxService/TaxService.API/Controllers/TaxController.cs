@@ -30,33 +30,13 @@ namespace TaxService.API.Controllers
         [Route("rate")]
         public async Task<ActionResult> GetRateByLocation([FromQuery] Location location)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (location == null)
-                {
-                    _logger.LogInformation("Location is null", location);
-                    return BadRequest("Location object is null.");
-                }
-
-                if (string.IsNullOrEmpty(location.Zip))
-                {
-                    _logger.LogInformation("Invalid Zip", location);
-                    ModelState.AddModelError("Zip", "Zip is required");
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    _logger.LogInformation("Invalid fields", location);
-                    return BadRequest("Invalid fields.");
-                }
-
-                return Ok(await _taxServiceOp.GetRateByLocationAsync(location));
+                _logger.LogInformation("Invalid fields", location);
+                return BadRequest("Invalid fields");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, location);
-                return StatusCode(500, "Internal server error");
-            }
+            _logger.LogInformation("Calling service", location);
+            return Ok(await _taxServiceOp.GetRateByLocationAsync(location));
         }
 
         /// <summary>
@@ -68,30 +48,11 @@ namespace TaxService.API.Controllers
         [Route("tax")]
         public async Task<ActionResult> CalculateTaxByOrder([FromBody] Order order)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (order == null)
-                {
-                    return BadRequest("order object is null");
-                }
-
-                if (string.IsNullOrEmpty(order.ToCountry))
-                {
-                    _logger.LogInformation("Invalid To Country", order);
-                    ModelState.AddModelError("toCountry", "toCountry is required");
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest("Invalid model object");
-                }
-                return Ok(await _taxServiceOp.CalculateTaxByOrderAsync(order));
+                return BadRequest("Invalid model object");
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside the CalculateTaxByOrder action: {ex}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(await _taxServiceOp.CalculateTaxByOrderAsync(order));
         }
     }
 }

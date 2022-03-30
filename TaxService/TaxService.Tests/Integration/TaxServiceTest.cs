@@ -19,7 +19,6 @@ namespace TaxService.Tests.Integration
     {
         private TaxController _controller;
         private IService _taxService;
-        private IRepository _repository;
         private IMapper _mapper;
 
         [OneTimeSetUp]
@@ -45,8 +44,6 @@ namespace TaxService.Tests.Integration
 
             var factory = serviceProvider.GetService<ILoggerFactory>();
             var taxLogger = factory.CreateLogger<TaxController>();
-            //var serviceLogger = factory.CreateLogger<TaxOpService>();
-            // _taxService = new TaxOpService(_repository, _mapper, serviceLogger);
             _controller = new TaxController(taxLogger, _taxService);
         }
 
@@ -73,7 +70,7 @@ namespace TaxService.Tests.Integration
                 Country = "US",
                 State = "FL",
                 Street = "7th",
-                Zip = "33071"
+                Zip = 33071
             };
 
             //Act
@@ -122,16 +119,12 @@ namespace TaxService.Tests.Integration
             var order = new Order
             {
                 Amount = (decimal)15.00,
-                FromCity = "Miami",
                 FromCountry = "US",
                 ToCountry = "US",
                 FromState = "FL",
-                FromStreet = "7th",
                 FromZip = "33071",
                 Shipping = (decimal)1.00,
-                ToCity = "Miami",
                 ToState = "FL",
-                ToStreet = "10th",
                 ToZip = "33131",
                 LineItems = new List<LineItem>()
                 {
@@ -156,8 +149,7 @@ namespace TaxService.Tests.Integration
             //Arrange
             var order = new Order
             {
-                Amount = (decimal)15.00,
-                FromCity = "Miami",
+                Amount = (decimal)15.00
             };
 
             //Act

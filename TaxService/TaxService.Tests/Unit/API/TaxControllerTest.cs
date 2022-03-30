@@ -72,7 +72,7 @@ namespace TaxService.Tests
                 Country = "US",
                 State = "FL",
                 Street = "7th",
-                Zip = "33071"
+                Zip = 33071,
             };
 
             //Act
@@ -121,7 +121,6 @@ namespace TaxService.Tests
             var order = new Order
             {
                 Amount = (decimal)15.00,
-                FromCity = "Miami",
                 FromCountry = "US",
                 ToCountry = "US"
             };
@@ -140,7 +139,6 @@ namespace TaxService.Tests
             var order = new Order
             {
                 Amount = (decimal)15.00,
-                FromCity = "Miami",
             };
 
             //Act
@@ -149,5 +147,7 @@ namespace TaxService.Tests
             //Assert
             Assert.IsInstanceOf<BadRequestObjectResult>(response.Result as BadRequestObjectResult);
         }
+
+        //TODO: Test validation for other invalid requests
     }
 }
